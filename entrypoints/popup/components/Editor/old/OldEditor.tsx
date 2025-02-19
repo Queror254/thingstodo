@@ -39,7 +39,11 @@ const CustomEditor: React.FC<CustomEditorProps> = ({
 
   return (
     <EditorProvider>
-      <Editor value={editorValue} onChange={handleEditorChange}>
+      <Editor
+        value={editorValue}
+        onChange={handleEditorChange}
+        className="text-[14px]"
+      >
         <Toolbar>
           <BtnUndo />
           <BtnRedo />

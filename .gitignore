@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 .output
 stats.html
+test.js
 stats-*.json
 .wxt
 web-ext.config.ts

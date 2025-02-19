@@ -23,6 +23,7 @@
     "firebase": "^11.1.0",
     "flowbite-react": "^0.10.2",
     "is-hotkey": "^0.2.0",
+    "marked": "^15.0.7",
     "quill": "^2.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../Data/firebase";
 import TaskCards from "../TaskCard/taskCard";
 import TaskCreationCard from "../CreateTask/CreateTaskCard";
+import TaskEditCard from "../EditTask/TaskEditor";
 import { Task } from "../types/Task";
 
 interface TaskProps {
@@ -30,6 +38,21 @@ function Home() {
   // Function to toggle the sidebar visibility
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // Function to mark a task as complete
+  const markTaskAsComplete = async (taskId: string) => {
+    const taskRef = doc(db, "taskdb", taskId);
+    await updateDoc(taskRef, { completed: true });
+  };
+
+  //Function to delete a task
+  const deleteTask = async (taskId: string) => {
+    const taskRef = doc(db, "taskdb", taskId);
+    //delete the task from firestore
+    await deleteDoc(taskRef);
+    //update the local state
+    setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
   //fetch tasks from firestore
@@ -85,7 +108,8 @@ function Home() {
             new Date(task.dueDate).toDateString() === tomorrow.toDateString()
           );
         default:
-          return true; // "All" filter shows all tasks
+          //all except completed
+          return !task.completed; // "All" filter shows all tasks
       }
     } catch (error) {
       console.error("Error filtering tasks: ", error);
@@ -212,7 +236,11 @@ function Home() {
               {/** animate-horizontal-spin */}
             </div>
           ) : (
-            <TaskCards tasks={filteredTasks} />
+            <TaskCards
+              tasks={filteredTasks}
+              onMarkComplete={markTaskAsComplete}
+              onDeleteTask={deleteTask}
+            />
           )}
         </div>
         <button

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { marked } from "marked";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../Data/firebase";
 import CustomEditor from "../Editor/old/OldEditor";
+import TaskDescription from "../TaskCard/TaskDescription";
 
 interface TaskFormData {
   title: string;
@@ -17,6 +19,7 @@ interface TaskEditCardProps {
   isOpen: boolean;
   toggleTaskEdit: () => void;
   task: TaskFormData & { id: string };
+  //editTask: (task: string) => Promise<void>;
 }
 
 interface CustomEditorProps {
@@ -33,6 +36,11 @@ const TaskEditCard: React.FC<TaskEditCardProps> = ({
   const [formData, setFormData] = useState<TaskFormData>(task);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const descHtml = marked.parse(formData.description) as string;
+  // convert html to normal formatted text
+  //const descValue = descHtml.replace(/<[^>]*>?/g, "");
+  const descValue = descHtml;
 
   // Update form data when task prop changes
   useEffect(() => {
@@ -127,7 +135,7 @@ const TaskEditCard: React.FC<TaskEditCardProps> = ({
             </label>
             <CustomEditor
               onChange={handleDescriptionChange}
-              initialValue={formData.description}
+              initialValue={descValue}
             />
           </div>
 
