@@ -21,14 +21,16 @@ import {
 
 interface CustomEditorProps {
   onChange: (value: string) => void;
-  initialValue: string;
+  initialValue?: string;
 }
 
 const CustomEditor: React.FC<CustomEditorProps> = ({
   onChange,
   initialValue,
 }) => {
-  const [editorValue, setEditorValue] = useState<string>(initialValue);
+  const [editorValue, setEditorValue] = useState<string>(
+    initialValue || "add your description here"
+  );
 
   const handleEditorChange = (e: ContentEditableEvent) => {
     setEditorValue(e.target.value);
